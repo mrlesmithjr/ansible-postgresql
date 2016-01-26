@@ -4,6 +4,7 @@
     name: "{{ item }}"
     state: present
   with_items:
+    - libpq-dev
     - python-dev
     - python-pip
 
@@ -13,7 +14,7 @@
     state: present
   with_items:
     - psycopg2
-    
+
 - name: debian | installing postgresql
   apt:
     name: "{{ item }}"
