@@ -3,6 +3,7 @@
   apt:
     name: "{{ item }}"
     state: present
+  become: true
   with_items:
     - libpq-dev
     - python-dev
@@ -12,6 +13,7 @@
   pip:
     name: "{{ item }}"
     state: present
+  become: true
   with_items:
     - psycopg2
 
@@ -19,6 +21,7 @@
   apt:
     name: "{{ item }}"
     state: present
+  become: true
   with_items:
     - postgresql
     - postgresql-contrib
