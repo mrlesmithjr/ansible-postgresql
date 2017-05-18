@@ -1,2 +1,59 @@
 ---
 # defaults file for ansible-postgresql
+postgresql_config: false
+
+postgresql_data_dir: '/var/lib/postgresql/{{ postgresql_version }}/main'
+
+postgresql_debian_pre_reqs:
+  - 'libpq-dev'
+  - 'python-dev'
+  - 'python-pip'
+
+postgresql_debian_repo_info:
+  key: 'https://www.postgresql.org/media/keys/ACCC4CF8.asc'
+  repo: 'deb http://apt.postgresql.org/pub/repos/apt/ {{ ansible_distribution_release|lower }}-pgdg main'
+
+postgresql_dynamic_shared_memory_type: 'posix'
+
+postgresql_enable_bonjour: false
+
+postgresql_enable_replication: false
+
+postgresql_enable_ssl: true
+
+postgresql_external_pid_file: '/var/run/postgresql/{{ postgresql_version }}-main.pid'
+
+postgresql_hba_file: '/etc/postgresql/{{ postgresql_version }}/main/pg_hba.conf'
+
+postgresql_ident_file: '/etc/postgresql/{{ postgresql_version }}/main/pg_ident.conf'
+
+postgresql_listen_addresses:
+  - 'localhost'
+  # - '*'
+
+postgresql_listen_port: 5432
+
+postgresql_max_connections: 100
+
+postgresql_replication:
+  interface: 'enp0s8'
+  # master: "{{ groups[postgresql_replication_group][0] }}"
+  master: 'node0'
+  user: 'repluser'
+
+# Define Ansible group which contains the hosts to setup replication
+postgresql_replication_group: 'postgres_replication'
+
+postgresql_shared_buffers: '128MB'
+
+postgresql_unix_socket_directories:
+  - '/var/run/postgresql'
+
+postgresql_users: []
+  # - name: 'test'
+  #   # db: 'test'
+  #   password: 'test'
+  #   # priv: ''
+  #   state: 'present'
+
+postgresql_version: 9.6
