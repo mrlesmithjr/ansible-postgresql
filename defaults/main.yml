@@ -1,6 +1,6 @@
 ---
 # defaults file for ansible-postgresql
-postgresql_config: true
+postgresql_config: false
 
 postgresql_data_dir: '/var/lib/postgresql/{{ postgresql_version }}/main'
 
