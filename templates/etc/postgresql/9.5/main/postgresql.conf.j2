@@ -28,6 +28,7 @@ unix_socket_directories = '{{ postgresql_unix_socket_directories|join(',') }}'
 #------------------------------------------------------------------------------
 dynamic_shared_memory_type = {{ postgresql_dynamic_shared_memory_type }}
 shared_buffers = {{ postgresql_shared_buffers }}
+max_prepared_transactions = {{ postgresql_max_prepared_transactions }}
 
 #------------------------------------------------------------------------------
 # WRITE AHEAD LOG

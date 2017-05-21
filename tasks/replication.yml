@@ -20,6 +20,7 @@
     name: "postgresql"
     state: "restarted"
   become: true
+  register: "_pg_restarted"
   when: >
         inventory_hostname == postgresql_replication['master'] and
         (_pg_conf_reconfigured['changed'] or
@@ -37,6 +38,14 @@
 - name: replication | Setting Master Replication IP
   set_fact:
     postgresql_master_ip: "{{ hostvars[postgresql_replication['master']]['ansible_' + postgresql_replication['interface']]['ipv4']['address'] }}"
+
+- name: replication | Waiting For Postgresql To Be Running
+  wait_for:
+    port: "{{ postgresql_listen_port }}"
+    delay: 20
+  when: >
+        inventory_hostname == postgresql_replication['master'] and
+        _pg_restarted['changed']
 
 - name: replication | Backing Up Master Databases To Slaves
   shell: "pg_basebackup -h {{ postgresql_master_ip }} -U {{ postgresql_replication['user'] }} -Ft -x -D - > /tmp/backup.tar"
