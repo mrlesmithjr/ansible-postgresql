@@ -46,6 +46,11 @@ postgresql_listen_port: 5432
 # server. The default is typically 100 connections
 postgresql_max_connections: 100
 
+# Sets the maximum number of transactions that can be in the "prepared"
+# state simultaneously. Setting this parameter to zero (which is the default)
+# disables the prepared-transaction feature
+postgresql_max_prepared_transactions: 0
+
 # Maximum size to let the WAL grow to between automatic WAL checkpoints.
 # This is a soft limit; WAL size can exceed max_wal_size under special
 # circumstances, like under heavy load, a failing archive_command, or a
