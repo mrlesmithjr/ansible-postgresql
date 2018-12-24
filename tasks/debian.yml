@@ -9,7 +9,7 @@
 - name: debian | Installing Postgresql Python Modules
   pip:
     name:
-      - 'psycopg2'
+      - psycopg2
     state: "present"
   become: true
 
@@ -35,4 +35,3 @@
       - 'postgresql-{{ postgresql_version }}'
     state: "present"
   become: true
-
