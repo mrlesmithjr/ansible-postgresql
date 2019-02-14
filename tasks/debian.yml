@@ -1,10 +1,11 @@
 ---
 - name: debian | Installing Postgresql Pre-Reqs
   apt:
-    name:
-      - "{{ postgresql_debian_pre_reqs }}"
+    name: "{{ postgresql_debian_pre_reqs }}"
     state: "present"
   become: true
+  register: result
+  until: result is successful
 
 - name: debian | Installing Postgresql Python Modules
   pip:
@@ -28,10 +29,10 @@
 - name: debian | Installing Postgresql
   apt:
     name:
-      - 'postgresql-{{ postgresql_version }}-debversion'
-      - 'postgresql-client-{{ postgresql_version }}'
-      - 'postgresql-contrib-{{ postgresql_version }}'
-      - 'postgresql-plpython-{{ postgresql_version }}'
-      - 'postgresql-{{ postgresql_version }}'
+      - "postgresql-{{ postgresql_version }}-debversion"
+      - "postgresql-client-{{ postgresql_version }}"
+      - "postgresql-contrib-{{ postgresql_version }}"
+      - "postgresql-plpython-{{ postgresql_version }}"
+      - "postgresql-{{ postgresql_version }}"
     state: "present"
   become: true
