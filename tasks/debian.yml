@@ -36,3 +36,10 @@
       - "postgresql-{{ postgresql_version }}"
     state: "present"
   become: true
+
+- name: debian | Ensuring Postgresql Service Is Enabled and Started
+  service:
+    name: postgresql
+    state: started
+    enabled: true
+  become: true
