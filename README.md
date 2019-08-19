@@ -1,4 +1,4 @@
-# Role Name
+# ansible-postgresql
 
 An [Ansible](https://www.ansible.com) role to install/configure [Postgresql](https://www.postgresql.org/)
 
