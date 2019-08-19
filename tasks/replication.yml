@@ -2,38 +2,37 @@
 - name: replication | Managing Postgresql Replication User
   postgresql_user:
     name: "{{ postgresql_replication['user'] }}"
-    role_attr_flags: "REPLICATION"
-    state: "present"
+    role_attr_flags: REPLICATION
+    state: present
   become: true
-  become_user: "postgres"
+  become_user: postgres
   when: inventory_hostname == postgresql_replication['master']
 
 - name: replication | Checking If Replication Is Already Setup
   stat:
     path: "{{ postgresql_data_dir }}/recovery.conf"
-  register: "_pg_replication_setup_check"
+  register: _pg_replication_setup_check
   become: true
   when: inventory_hostname != postgresql_replication['master']
 
 - name: replication | Restarting Postgresql On Master (If Reconfigured)
   service:
-    name: "postgresql"
-    state: "restarted"
+    name: postgresql
+    state: restarted
   become: true
-  register: "_pg_restarted"
-  when: >
-        inventory_hostname == postgresql_replication['master'] and
-        (_pg_conf_reconfigured['changed'] or
-        _pg_hba_conf_reconfigured['changed'])
+  register: _pg_restarted
+  when:
+    - inventory_hostname == postgresql_replication['master']
+    - _pg_conf_reconfigured['changed'] or _pg_hba_conf_reconfigured['changed']
 
 - name: replication | Stopping Postgresql On Slaves
   service:
-    name: "postgresql"
-    state: "stopped"
+    name: postgresql
+    state: stopped
   become: true
-  when: >
-        inventory_hostname != postgresql_replication['master'] and
-        not _pg_replication_setup_check['stat']['exists']
+  when:
+    - inventory_hostname != postgresql_replication['master']
+    - not _pg_replication_setup_check['stat']['exists']
 
 - name: replication | Setting Master Replication IP
   set_fact:
@@ -43,59 +42,59 @@
   wait_for:
     port: "{{ postgresql_listen_port }}"
     delay: 20
-  when: >
-        inventory_hostname == postgresql_replication['master'] and
-        _pg_restarted['changed']
+  when:
+    - inventory_hostname == postgresql_replication['master']
+    - _pg_restarted['changed']
 
 - name: replication | Backing Up Master Databases To Slaves
   shell: "pg_basebackup -h {{ postgresql_master_ip }} -U {{ postgresql_replication['user'] }} -Ft -x -D - > /tmp/backup.tar"
   become: true
-  become_user: "postgres"
-  when: >
-        inventory_hostname != postgresql_replication['master'] and
-        not _pg_replication_setup_check['stat']['exists']
+  become_user: postgres
+  when:
+    - inventory_hostname != postgresql_replication['master']
+    - not _pg_replication_setup_check['stat']['exists']
 
 - name: replication | Purging Existing Data On Slaves
   file:
     path: "{{ postgresql_data_dir }}"
-    state: "absent"
+    state: absent
   become: true
-  when: >
-        inventory_hostname != postgresql_replication['master'] and
-        not _pg_replication_setup_check['stat']['exists']
+  when:
+    - inventory_hostname != postgresql_replication['master']
+    - not _pg_replication_setup_check['stat']['exists']
 
 - name: replication | Recreating Data Directory On Slaves
   file:
     path: "{{ postgresql_data_dir }}"
-    state: "directory"
-    owner: "postgres"
-    group: "postgres"
-    mode: "u=rwx,g=,o="
+    state: directory
+    owner: postgres
+    group: postgres
+    mode: u=rwx,g=,o=
   become: true
-  when: >
-        inventory_hostname != postgresql_replication['master'] and
-        not _pg_replication_setup_check['stat']['exists']
+  when:
+    - inventory_hostname != postgresql_replication['master']
+    - not _pg_replication_setup_check['stat']['exists']
 
 - name: replication | Restoring Master Backup
   unarchive:
     src: "/tmp/backup.tar"
     dest: "{{ postgresql_data_dir }}/"
-    owner: "postgres"
-    group: "postgres"
+    owner: postgres
+    group: postgres
     remote_src: true
   become: true
-  when: >
-        inventory_hostname != postgresql_replication['master'] and
-        not _pg_replication_setup_check['stat']['exists']
+  when:
+    - inventory_hostname != postgresql_replication['master']
+    - not _pg_replication_setup_check['stat']['exists']
 
 - name: replication | Configuring Recovery
   template:
     src: "var/lib/postgresql/{{ postgresql_version }}/main/recovery.conf.j2"
     dest: "{{ postgresql_data_dir }}/recovery.conf"
-    owner: "postgres"
-    group: "postgres"
+    owner: postgres
+    group: postgres
   become: true
-  notify: "restart postgresql"
-  when: >
-        inventory_hostname != postgresql_replication['master'] and
-        not _pg_replication_setup_check['stat']['exists']
+  notify: restart postgresql
+  when:
+    - inventory_hostname != postgresql_replication['master']
+    - not _pg_replication_setup_check['stat']['exists']

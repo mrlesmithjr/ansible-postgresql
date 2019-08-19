@@ -2,6 +2,6 @@
 # handlers file for ansible-postgresql
 - name: restart postgresql
   service:
-    name: "postgresql"
-    state: "restarted"
+    name: postgresql
+    state: restarted
   become: true

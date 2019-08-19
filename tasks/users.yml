@@ -6,6 +6,6 @@
     role_attr_flags: "{{ item['role_attr_flags']|default(omit) }}"
     state: "{{ item['state'] }}"
   become: true
-  become_user: "postgres"
+  become_user: postgres
   with_items: "{{ postgresql_users }}"
   when: postgresql_users is defined
