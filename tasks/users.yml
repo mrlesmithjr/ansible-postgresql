@@ -9,3 +9,5 @@
   become_user: postgres
   with_items: "{{ postgresql_users }}"
   when: postgresql_users is defined
+  vars:
+    ansible_ssh_pipelining: true
