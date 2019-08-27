@@ -7,14 +7,17 @@ galaxy_info:
   min_ansible_version: 1.2
 
   platforms:
+    - name: Debian
+      versions:
+        - jessie
+    - name: EL
+      versions:
+        - 7
     - name: Ubuntu
       versions:
         - bionic
         - trusty
         - xenial
-    - name: Debian
-      versions:
-        - jessie
 
   galaxy_tags:
     - sql

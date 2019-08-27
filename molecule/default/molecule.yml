@@ -6,6 +6,14 @@ driver:
 lint:
   name: yamllint
 platforms:
+  - name: centos7
+    image: centos:7
+    command: /sbin/init
+    tmpfs:
+      - /run
+      - /tmp
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
   - name: ubuntu1404
     image: ubuntu:14.04
   - name: ubuntu1604

@@ -1,0 +1,35 @@
+---
+- name: redhat | Adding Postgresql Repo
+  yum:
+    name: https://download.postgresql.org/pub/repos/yum/reporpms/EL-7-x86_64/pgdg-redhat-repo-latest.noarch.rpm
+    state: present
+  become: true
+  register: result
+  until: result is successful
+
+- name: redhat | Installing Postgresql
+  yum:
+    name:
+      - "postgresql{{ postgresql_version|replace('.', '') }}"
+      - "postgresql{{ postgresql_version|replace('.', '') }}-server"
+      - "postgresql{{ postgresql_version|replace('.', '') }}-contrib"
+    state: present
+  become: true
+  register: result
+  until: result is successful
+
+- name: redhat | Checking If DB Has Been Initialized
+  stat:
+    path: "{{ '/var/lib/pgsql/' + postgresql_version|string + '/initdb.log' }}"
+  register: _pg_db_init_check
+
+- name: redhat | Initializing DB
+  command: "{{ '/usr/pgsql-' + postgresql_version|string + '/bin/postgresql' + postgresql_version|string|replace('.', '') + '-setup initdb' }}"
+  when: not _pg_db_init_check['stat']['exists']
+
+- name: redhat | Ensuring Postgresql Service Is Enabled and Started
+  service:
+    name: "postgresql-{{ postgresql_version }}"
+    state: started
+    enabled: true
+  become: true
