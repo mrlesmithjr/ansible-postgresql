@@ -15,6 +15,14 @@
   register: result
   until: result is successful
 
+- name: redhat | Installing Development Tools
+  yum:
+    name: "@Development tools"
+    state: present
+  become: true
+  register: result
+  until: result is successful
+
 - name: redhat | Installing Postgresql Python Modules
   pip:
     name: ["psycopg2"]
