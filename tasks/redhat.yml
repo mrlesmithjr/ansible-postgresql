@@ -1,4 +1,28 @@
 ---
+- name: redhat | Adding EPEL Release
+  yum:
+    name: epel-release
+    state: present
+  become: true
+  register: result
+  until: result is successful
+
+- name: redhat | Installing Pre-Reqs
+  yum:
+    name: "{{ postgresql_redhat_pre_reqs }}"
+    state: present
+  become: true
+  register: result
+  until: result is successful
+
+- name: redhat | Installing Postgresql Python Modules
+  pip:
+    name: ["psycopg2"]
+    state: present
+  become: true
+  register: result
+  until: result is successful
+
 - name: redhat | Adding Postgresql Repo
   yum:
     name: https://download.postgresql.org/pub/repos/yum/reporpms/EL-7-x86_64/pgdg-redhat-repo-latest.noarch.rpm

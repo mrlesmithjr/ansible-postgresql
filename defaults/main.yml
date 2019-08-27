@@ -10,9 +10,9 @@ postgresql_dbs: []
 #   state: present
 
 postgresql_debian_pre_reqs:
-  - "libpq-dev"
-  - "python-dev"
-  - "python-pip"
+  - libpq-dev
+  - python-dev
+  - python-pip
 
 postgresql_debian_repo_info:
   key: "https://www.postgresql.org/media/keys/ACCC4CF8.asc"
@@ -69,6 +69,11 @@ postgresql_max_wal_size: 1GB
 # WAL usage, for example when running large batch jobs.
 # The default is 80 MB
 postgresql_min_wal_size: 80MB
+
+postgresql_redhat_pre_reqs:
+  - libpqxx-devel
+  - python-devel
+  - python-pip
 
 postgresql_replication:
   interface: "enp0s8"
