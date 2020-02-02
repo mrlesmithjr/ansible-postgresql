@@ -17,7 +17,7 @@
 
 - name: replication | Restarting Postgresql On Master (If Reconfigured)
   service:
-    name: postgresql
+    name: "{{ postgresql_service }}"
     state: restarted
   become: true
   register: _pg_restarted
@@ -27,7 +27,7 @@
 
 - name: replication | Stopping Postgresql On Slaves
   service:
-    name: postgresql
+    name: "{{ postgresql_service }}"
     state: stopped
   become: true
   when:
@@ -94,7 +94,8 @@
     owner: postgres
     group: postgres
   become: true
-  notify: restart postgresql
+  notify:
+    - restart postgresql
   when:
     - inventory_hostname != postgresql_replication['master']
     - not _pg_replication_setup_check['stat']['exists']

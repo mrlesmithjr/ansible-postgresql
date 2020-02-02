@@ -38,7 +38,7 @@
 
 - name: debian | Ensuring Postgresql Service Is Enabled and Started
   service:
-    name: postgresql
+    name: "{{ postgresql_service }}"
     state: started
     enabled: true
   become: true

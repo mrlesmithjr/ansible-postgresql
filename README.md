@@ -15,8 +15,15 @@ If setting up replication:
 `defaults/main.yml`
 
 ```yaml
-# Define Ansible group which contains the hosts to setup replication
-postgresql_replication_group: "postgres_replication"
+postgresql_config: true
+postgresql_enable_replication: true
+postgresql_listen_addresses:
+  - "*"
+postgresql_replication:
+  interface: enp0s8
+  master: "{{ groups[postgresql_replication_group][0] }}"
+  user: repluser
+postgresql_replication_group: postgres_replication
 ```
 
 ## Role Variables

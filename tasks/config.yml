@@ -2,29 +2,32 @@
 - name: config | Configuring Postgresql (postgresql.conf)
   template:
     src: "etc/postgresql/{{ postgresql_version }}/main/postgresql.conf.j2"
-    dest: "/etc/postgresql/{{ postgresql_version }}/main/postgresql.conf"
+    dest: "{{ postgresql_conf }}"
     owner: postgres
     group: postgres
     mode: u=rw,g=r,o=r
   register: _pg_conf_reconfigured
   become: true
-  notify: restart postgresql
+  notify:
+    - restart postgresql
 
 - name: config | Configuring Postgresql (pg_hba.conf)
   template:
     src: "etc/postgresql/{{ postgresql_version }}/main/pg_hba.conf.j2"
-    dest: "/etc/postgresql/{{ postgresql_version }}/main/pg_hba.conf"
+    dest: "{{ postgresql_hba_file }}"
     owner: postgres
     group: postgres
     mode: u=rw,g=r,o=r
   register: _pg_hba_conf_reconfigured
   become: true
-  notify: restart postgresql
+  notify:
+    - restart postgresql
 
 - name: config | Ensuring Postgresql Recovery Config Is Removed
   file:
     path: "{{ postgresql_data_dir }}/recovery.conf"
     state: absent
   become: true
-  notify: restart postgresql
+  notify:
+    - restart postgresql
   when: not postgresql_enable_replication

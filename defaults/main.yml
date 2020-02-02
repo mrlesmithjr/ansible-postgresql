@@ -1,8 +1,9 @@
 ---
 # defaults file for ansible-postgresql
-postgresql_config: false
 
-postgresql_data_dir: "/var/lib/postgresql/{{ postgresql_version }}/main"
+# Defines whether Postgres should be configured. If setting up replication, this
+# must be set to true.
+postgresql_config: false
 
 # Defines any DBs to manage
 postgresql_dbs: []
@@ -25,11 +26,9 @@ postgresql_enable_bonjour: false
 
 postgresql_enable_replication: false
 
-postgresql_enable_ssl: true
+postgresql_enable_ssl: false
 
 postgresql_external_pid_file: "/var/run/postgresql/{{ postgresql_version }}-main.pid"
-
-postgresql_hba_file: "/etc/postgresql/{{ postgresql_version }}/main/pg_hba.conf"
 
 postgresql_ident_file: "/etc/postgresql/{{ postgresql_version }}/main/pg_ident.conf"
 
@@ -77,8 +76,8 @@ postgresql_redhat_pre_reqs:
 
 postgresql_replication:
   interface: "enp0s8"
-  # master: "{{ groups[postgresql_replication_group][0] }}"
-  master: "node0"
+  master: "{{ groups[postgresql_replication_group][0] }}"
+  # master: "node0"
   user: "repluser"
 
 # Define Ansible group which contains the hosts to setup replication

@@ -1,0 +1,20 @@
+---
+- name: set_facts | Debian Facts
+  set_fact:
+    postgresql_conf: "/etc/postgresql/{{ postgresql_version }}/main/postgresql.conf"
+    postgresql_data_dir: "/var/lib/postgresql/{{ postgresql_version }}/main"
+    postgresql_hba_file: "/etc/postgresql/{{ postgresql_version }}/main/pg_hba.conf"
+    postgresql_service: postgresql
+  when: ansible_os_family == "Debian"
+
+- name: set_facts | RedHat Facts
+  set_fact:
+    postgresql_conf: "/var/lib/pgsql/{{ postgresql_version }}/data/postgresql.conf"
+    postgresql_data_dir: "/var/lib/pgsql/{{ postgresql_version }}/data"
+    postgresql_hba_file: "/var/lib/pgsql/{{ postgresql_version }}/data/pg_hba.conf"
+    postgresql_service: "postgresql-{{ postgresql_version }}"
+  when: ansible_os_family == "RedHat"
+
+- name: set_facts | Debug
+  debug:
+    var: postgresql_service

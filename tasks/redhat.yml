@@ -54,14 +54,16 @@
   stat:
     path: "{{ '/var/lib/pgsql/' + postgresql_version|string + '/initdb.log' }}"
   register: _pg_db_init_check
+  become: true
 
 - name: redhat | Initializing DB
   command: "{{ '/usr/pgsql-' + postgresql_version|string + '/bin/postgresql' + postgresql_version|string|replace('.', '') + '-setup initdb' }}"
   when: not _pg_db_init_check['stat']['exists']
+  become: true
 
 - name: redhat | Ensuring Postgresql Service Is Enabled and Started
   service:
-    name: "postgresql-{{ postgresql_version }}"
+    name: "{{ postgresql_service }}"
     state: started
     enabled: true
   become: true
