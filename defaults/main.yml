@@ -104,6 +104,25 @@ postgresql_users:
   #   # role_attr_flags: ''
   #   state: present
 
+# Configure HBA (to allow remote connections)
+# Dict of the following keys:
+#   type: host/local
+#   database: use 'all' for... all
+#   user: use 'all' for... all
+#   address: CIDR IP(v4/v6)
+#   method: md5/trust/peer/...
+postgresql_config_hba:
+  - type: host
+    database: all
+    user: all
+    address: 127.0.0.1/32
+    method: md5
+  - type: host
+    database: all
+    user: all
+    address: ::1/128
+    method: md5
+
 # Define version to be installed
 postgresql_version: 9.6
 

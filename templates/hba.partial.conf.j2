@@ -1,0 +1,4 @@
+# Configure HBA for databases:
+{% for hba in postgresql_config_hba %}
+{{ hba.type }}     {{ hba.database }}     {{ hba.user }}      {{ hba.address }}     {{ hba.method }}
+{% endfor %}

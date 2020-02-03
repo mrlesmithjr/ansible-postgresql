@@ -17,6 +17,8 @@ platforms:
     dockerfile: ./../shared/Dockerfile.j2
 provisioner:
   name: ansible
+  # options:
+  #   vvv: true
   playbooks:
     converge: ./../shared/playbook.yml
   lint:
