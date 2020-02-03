@@ -37,20 +37,20 @@
 - name: redhat | Installing Postgresql
   yum:
     name:
-      - "postgresql{{ postgresql_version|replace('.', '') }}"
-      - "postgresql{{ postgresql_version|replace('.', '') }}-server"
-      - "postgresql{{ postgresql_version|replace('.', '') }}-contrib"
+      - "postgresql{{ _postgresql_version }}"
+      - "postgresql{{ _postgresql_version }}-server"
+      - "postgresql{{ _postgresql_version }}-contrib"
     state: present
   register: result
   until: result is successful
 
 - name: redhat | Checking If DB Has Been Initialized
   stat:
-    path: "{{ '/var/lib/pgsql/' + postgresql_version|string + '/initdb.log' }}"
+    path: "{{ _postgresql_init_log }}"
   register: _pg_db_init_check
 
 - name: redhat | Initializing DB
-  command: "{{ '/usr/pgsql-' + postgresql_version|string + '/bin/postgresql' + postgresql_version|string|replace('.', '') + '-setup initdb' }}"
+  command: "{{ _postgresql_init_db }}"
   when: not _pg_db_init_check['stat']['exists']
 
 - name: redhat | Ensuring Postgresql Service Is Enabled and Started

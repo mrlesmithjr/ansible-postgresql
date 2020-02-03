@@ -13,6 +13,11 @@
     postgresql_data_dir: "/var/lib/pgsql/{{ postgresql_version }}/data"
     postgresql_hba_file: "/var/lib/pgsql/{{ postgresql_version }}/data/pg_hba.conf"
     postgresql_service: "postgresql-{{ postgresql_version }}"
+    _postgresql_version: "{{ postgresql_version | replace('.', '') }}"
+    _postgresql_init_log: "/var/lib/pgsql/{{ postgresql_version }}/initdb.log"
+    _postgresql_bin: "/usr/pgsql-{{ postgresql_version }}/bin"
+    # FIXME for 11, probably 10: _postgresql_init_db: "/usr/pgsql-{{ postgresql_version }}/bin/postgresql-{{ _postgresql_version }}-setup initdb"
+    _postgresql_init_db: "{{ _postgresql_bin }}/postgresql{{ _postgresql_version }}-setup initdb"
   when: ansible_os_family == "RedHat"
 
 - name: set_facts | Debug
