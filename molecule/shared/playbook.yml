@@ -3,3 +3,9 @@
   hosts: all
   roles:
     - role: ansible-postgresql
+      vars:
+        postgresql_users:
+          - name: 'pgpool'
+            password: 'pgpool'
+            role_attr_flags: 'REPLICATION,LOGIN,NOCREATEROLE,NOCREATEDB'
+            state: 'present'

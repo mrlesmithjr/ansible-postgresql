@@ -101,8 +101,8 @@ postgresql_users:
   # - name: 'test'
   #   # db: 'test'
   #   password: 'test'
-  #   # priv: ''
-  #   state: 'present'
+  #   # role_attr_flags: ''
+  #   state: present
 
 # Define version to be installed
 postgresql_version: 9.6
