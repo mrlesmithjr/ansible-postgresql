@@ -7,7 +7,6 @@
     group: postgres
     mode: u=rw,g=r,o=r
   register: _pg_conf_reconfigured
-  become: true
   notify:
     - restart postgresql
 
@@ -19,7 +18,6 @@
     group: postgres
     mode: u=rw,g=r,o=r
   register: _pg_hba_conf_reconfigured
-  become: true
   notify:
     - restart postgresql
 
@@ -27,7 +25,6 @@
   file:
     path: "{{ postgresql_data_dir }}/recovery.conf"
     state: absent
-  become: true
   notify:
     - restart postgresql
   when: not postgresql_enable_replication

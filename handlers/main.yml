@@ -4,4 +4,3 @@
   service:
     name: "{{ postgresql_service }}"
     state: restarted
-  become: true
