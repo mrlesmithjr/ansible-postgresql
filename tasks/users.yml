@@ -1,13 +1,31 @@
 ---
-- name: users | Managing Postgresql Users
+- name: users | Managing Postgresql Users [not replication]
   postgresql_user:
     name: "{{ item['name'] }}"
-    password: "{{ item['password'] }}"
+    password: "{{ item['password'] | default(omit) }}"
     role_attr_flags: "{{ item['role_attr_flags']|default(omit) }}"
-    state: "{{ item['state'] }}"
+    state: "{{ item['state'] | default(present) }}"
   become: true
   become_user: postgres
   with_items: "{{ postgresql_users }}"
-  when: postgresql_users is defined
+  when:
+    - postgresql_users is defined
+    - not postgresql_enable_replication
+  vars:
+    ansible_ssh_pipelining: true
+
+- name: users | Managing Postgresql Users [replication]
+  postgresql_user:
+    name: "{{ item['name'] }}"
+    password: "{{ item['password'] | default(omit) }}"
+    role_attr_flags: "{{ item['role_attr_flags']|default(omit) }}"
+    state: "{{ item['state'] | default(present) }}"
+  become: true
+  become_user: postgres
+  with_items: "{{ postgresql_users }}"
+  when:
+    - postgresql_users is defined
+    - postgresql_enable_replication
+    - inventory_hostname == postgresql_replication['master']
   vars:
     ansible_ssh_pipelining: true

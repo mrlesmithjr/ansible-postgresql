@@ -1,0 +1,23 @@
+---
+- name: Converge
+  hosts: all
+  roles:
+    - role: ansible-postgresql
+      vars:
+        postgresql_config: true
+        postgresql_config_hba:
+          - type: host
+            database: all
+            user: all
+            address: 0.0.0.0/0
+            method: md5
+          - type: host
+            database: all
+            user: all
+            address: ::/0
+            method: md5
+        postgresql_users:
+          - name: 'pgpool'
+            password: 'pgpool'
+            role_attr_flags: 'REPLICATION,LOGIN,NOCREATEROLE,NOCREATEDB'
+            state: 'present'

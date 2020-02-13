@@ -1,5 +1,6 @@
 ---
 language: python
+
 python:
   - "2.7"
   - "3.6"
@@ -10,10 +11,16 @@ services:
 install:
   - pip install molecule docker
 
-script:
+before_script:
   - molecule --version
   - ansible --version
-  - molecule test
+
+env:
+  - SCENARIO=default
+  - SCENARIO=centos
+
+script:
+  - "molecule test -s $SCENARIO"
 
 notifications:
   webhooks: https://galaxy.ansible.com/api/v1/notifications/

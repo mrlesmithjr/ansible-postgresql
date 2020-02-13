@@ -1,18 +1,17 @@
 ---
-- hosts: postgres_cluster
+- hosts: postgres_replication
   vars:
-    create_users: []
-    # - user: test
-    #   comment: Test user
-    #   generate_keys: true
-    #   pass: test
-    #   preseed_user: false
-    #   state: present
-    #   sudo: false
-    #   system_account: false
+    postgresql_config: true
+    postgresql_enable_replication: true
+    postgresql_listen_addresses:
+      - "*"
+    postgresql_replication:
+      interface: enp0s8
+      master: "{{ groups[postgresql_replication_group][0] }}"
+      user: repluser
+    postgresql_replication_group: postgres_replication
     pri_domain_name: test.vagrant.local
+
   roles:
-    - role: ansible-users
-      when: create_users is defined
     - role: ansible-postgresql
-  tasks:
+      become: true

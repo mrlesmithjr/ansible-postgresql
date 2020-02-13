@@ -1,0 +1,33 @@
+---
+- name: set_facts | Debian Facts
+  set_fact:
+    postgresql_conf: "/etc/postgresql/{{ postgresql_version }}/main/postgresql.conf"
+    postgresql_data_dir: "/var/lib/postgresql/{{ postgresql_version }}/main"
+    postgresql_hba_file: "/etc/postgresql/{{ postgresql_version }}/main/pg_hba.conf"
+    postgresql_service: postgresql
+  when: ansible_os_family == "Debian"
+
+- name: set_facts | RedHat Facts
+  set_fact:
+    postgresql_conf: "/var/lib/pgsql/{{ postgresql_version }}/data/postgresql.conf"
+    postgresql_data_dir: "/var/lib/pgsql/{{ postgresql_version }}/data"
+    postgresql_hba_file: "/var/lib/pgsql/{{ postgresql_version }}/data/pg_hba.conf"
+    postgresql_service: "postgresql-{{ postgresql_version }}"
+    _postgresql_version: "{{ postgresql_version | replace('.', '') }}"
+  when: ansible_os_family == "RedHat"
+
+- name: set_facts | RedHat Facts for paths
+  set_fact:
+    _postgresql_init_log: "/var/lib/pgsql/{{ postgresql_version }}/initdb.log"
+    _postgresql_bin: "/usr/pgsql-{{ postgresql_version }}/bin"
+  when: ansible_os_family == "RedHat"
+
+- name: set_facts | RedHat Facts for initdb
+  set_fact:
+    # FIXME for 11, probably 10: _postgresql_init_db: "/usr/pgsql-{{ postgresql_version }}/bin/postgresql-{{ _postgresql_version }}-setup initdb"
+    _postgresql_init_db: "{{ _postgresql_bin }}/postgresql{{ _postgresql_version }}-setup initdb"
+  when: ansible_os_family == "RedHat"
+
+- name: set_facts | Debug
+  debug:
+    var: postgresql_service
