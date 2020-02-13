@@ -76,8 +76,8 @@ postgresql_redhat_pre_reqs:
 
 postgresql_replication:
   interface: "enp0s8"
-  master: "{{ groups[postgresql_replication_group][0] }}"
-  # master: "node0"
+  # master: "{{ groups[postgresql_replication_group][0] }}"
+  master: "node0"
   user: "repluser"
 
 # Define Ansible group which contains the hosts to setup replication
