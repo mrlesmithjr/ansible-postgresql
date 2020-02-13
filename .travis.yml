@@ -16,8 +16,10 @@ before_script:
   - ansible --version
 
 env:
-  - SCENARIO=default
-  - SCENARIO=centos
+  - SCENARIO=default PSQL_VERSION=9.5
+  - SCENARIO=default PSQL_VERSION=9.6
+  - SCENARIO=centos PSQL_VERSION=9.5
+  - SCENARIO=centos PSQL_VERSION=9.6
 
 script:
   - "molecule test -s $SCENARIO"

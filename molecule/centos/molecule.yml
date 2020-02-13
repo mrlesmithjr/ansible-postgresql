@@ -18,6 +18,8 @@ platforms:
       - /sys/fs/cgroup:/sys/fs/cgroup:ro
 provisioner:
   name: ansible
+  env:
+    PSQL_VERSION: ${PSQL_VERSION:-9.6}
   playbooks:
     converge: ./../shared/playbook.yml
   lint:

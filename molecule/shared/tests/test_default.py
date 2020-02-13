@@ -10,9 +10,8 @@ def get_facts(host):
     return host.ansible("setup")["ansible_facts"]
 
 
-# We could take an environment variable here from a build matrix?
 def get_psql_version():
-    return '9.6'
+    return os.getenv('PSQL_VERSION', '9.6')
 
 
 def get_config_path(host, type):
@@ -59,3 +58,12 @@ def test_hba(host):
     hba = host.file(config_path)
     assert hba.contains('0.0.0.0/0')
     assert hba.contains('::/0')
+
+
+def test_service(host):
+    facts = get_facts(host)
+
+    if facts['ansible_os_family'] == 'Debian':
+        assert host.service('postgresql').is_running
+    else:
+        assert host.service('postgresql-' + get_psql_version()).is_running

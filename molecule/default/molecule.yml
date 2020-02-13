@@ -18,6 +18,8 @@ platforms:
     dockerfile: ./../shared/Dockerfile.j2
 provisioner:
   name: ansible
+  env:
+    PSQL_VERSION: ${PSQL_VERSION:-9.6}
   # options:
   #   vvv: true
   playbooks:
