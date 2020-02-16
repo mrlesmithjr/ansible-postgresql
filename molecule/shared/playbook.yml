@@ -4,6 +4,7 @@
   roles:
     - role: ansible-postgresql
       vars:
+        postgresql_version: "{{ lookup('env', 'PSQL_VERSION') }}"
         postgresql_config: true
         postgresql_config_hba:
           - type: host

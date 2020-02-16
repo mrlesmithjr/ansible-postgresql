@@ -1,0 +1,11 @@
+---
+- name: Ensure postgresql_version is not empty
+  assert:
+    that: postgresql_version | default(false)
+    quiet: true
+
+- name: Ensure that we configure postgresql when we want replication
+  assert:
+    that: postgresql_config
+    quiet: true
+  when: postgresql_enable_replication
