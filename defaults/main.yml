@@ -124,7 +124,7 @@ postgresql_config_hba:
     method: md5
 
 # Define version to be installed
-postgresql_version: 9.6
+postgresql_version: 10
 
 # The amount of shared memory used for WAL data that has not yet been written
 # to disk. The default setting of -1 selects a size equal to 1/32nd (about 3%)
