@@ -10,6 +10,8 @@
 - include_tasks: redhat.yml
   when: ansible_os_family == "RedHat"
 
+- include_tasks: python.yml
+
 - include_tasks: dbs.yml
 
 - include_tasks: users.yml

@@ -1,0 +1,12 @@
+---
+- hosts: all
+  tasks:
+    - name: Update Apt Cache
+      apt:
+        update_cache: true
+      become: true
+      when: ansible_os_family == "Debian"
+
+    - name: Apply ansible-bootrap-python role
+      include_role:
+        name: ansible-bootstrap-python
