@@ -1,3 +1,4 @@
 ---
 collections: []
-roles: []
+roles:
+- src: https://github.com/mrlesmithjr/ansible-bootstrap-python.git
