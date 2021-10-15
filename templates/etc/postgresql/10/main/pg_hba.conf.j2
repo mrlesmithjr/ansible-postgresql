@@ -1,0 +1,17 @@
+# TYPE  DATABASE        USER            ADDRESS                 METHOD
+local   all             postgres                                peer
+local   all             all                                     peer
+
+{% include './templates/hba.partial.conf.j2' %}
+
+# Replication connections:
+{% if postgresql_enable_replication %}
+{%   if inventory_hostname == postgresql_replication['master'] %}
+{%     for host in groups[postgresql_replication_group] %}
+{%       set repl_ip = (hostvars[host]['ansible_' + postgresql_replication['interface']]['ipv4']['address']) %}
+{%       if host != postgresql_replication['master'] %}
+host    replication    {{ postgresql_replication['user'] }}    {{ repl_ip }}/32    trust
+{%       endif %}
+{%     endfor %}
+{%   endif %}
+{% endif %}
