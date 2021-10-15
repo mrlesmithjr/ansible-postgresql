@@ -1,5 +1,8 @@
 !*
 
+### Ansible
+.cache/
+
 ### VirtualEnv ###
 # Virtualenv
 .venv/
