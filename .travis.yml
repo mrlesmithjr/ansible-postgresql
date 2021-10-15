@@ -1,28 +1,25 @@
 ---
+sudo: required
 language: python
-
-python:
-  - "2.7"
-  - "3.6"
-
 services:
   - docker
-
-install:
-  - pip install molecule docker
-
-before_script:
-  - molecule --version
-  - ansible --version
-
+before_install:
+  - sudo apt-get -qq update
 env:
-  - SCENARIO=default PSQL_VERSION=9.5
-  - SCENARIO=default PSQL_VERSION=9.6
-  - SCENARIO=centos PSQL_VERSION=9.5
-  - SCENARIO=centos PSQL_VERSION=9.6
-
+  - molecule_distro=centos7
+  - molecule_distro=centos8
+  - molecule_distro=debian8
+  - molecule_distro=debian9
+  - molecule_distro=debian10
+  - molecule_distro=fedora
+  - molecule_distro=ubuntu1604
+  - molecule_distro=ubuntu1804
+  - molecule_distro=ubuntu2004
+install:
+- python -m pip install --upgrade pip
+- pip install -r requirements.txt -r requirements-dev.txt
+- pip install pre-commit
 script:
-  - "molecule test -s $SCENARIO"
-
+  - molecule test --scenario-name "$molecule_distro"
 notifications:
   webhooks: https://galaxy.ansible.com/api/v1/notifications/

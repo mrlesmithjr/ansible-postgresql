@@ -3,8 +3,9 @@ galaxy_info:
   author: Larry Smith Jr.
   description: An Ansible role to install/configure Postgresql
   license: MIT
-
-  min_ansible_version: 1.2
+  min_ansible_version: 2.8
+  role_name: postgresql
+  namespace: mrlesmithjr
 
   platforms:
     - name: Debian
@@ -21,4 +22,5 @@ galaxy_info:
 
   galaxy_tags:
     - sql
+
 dependencies: []
