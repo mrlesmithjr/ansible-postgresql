@@ -1,0 +1,8 @@
+---
+- name: python | Installing Postgresql Python Modules
+  pip:
+    name:
+    - psycopg2-binary
+    state: present
+  register: result
+  until: result is successful

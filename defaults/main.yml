@@ -10,8 +10,8 @@ postgresql_dbs: []
 # - name: acme
 #   state: present
 
-postgresql_debian_pre_reqs: []
-  # - libpq-dev
+postgresql_debian_pre_reqs:
+  - libpq-dev
   # - python-dev
   # - python-pip
 
@@ -69,8 +69,8 @@ postgresql_max_wal_size: 1GB
 # The default is 80 MB
 postgresql_min_wal_size: 80MB
 
-postgresql_redhat_pre_reqs: []
-  # - libpqxx-devel
+postgresql_redhat_pre_reqs:
+  - libpqxx-devel
   # - python-devel
   # - python-pip
 
