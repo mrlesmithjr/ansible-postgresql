@@ -25,7 +25,7 @@
 - name: set_facts | RedHat Facts for initdb
   set_fact:
     # FIXME for 11, probably 10: _postgresql_init_db: "/usr/pgsql-{{ postgresql_version }}/bin/postgresql-{{ _postgresql_version }}-setup initdb"
-    _postgresql_init_db: "{{ _postgresql_bin }}/postgresql{{ _postgresql_version }}-setup initdb"
+    _postgresql_init_db: "{{ _postgresql_bin }}/postgresql-{{ _postgresql_version }}-setup initdb"
   when: ansible_os_family == "RedHat"
 
 - name: set_facts | Debug

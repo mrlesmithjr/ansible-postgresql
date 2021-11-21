@@ -2,7 +2,9 @@
 - name: python | Installing Postgresql Python Modules
   pip:
     name:
-    - psycopg2-binary
+      # FIXME - This currently errors out statying that pg_config is not found on RHEL
+      - psycopg2-binary
     state: present
+  become: true
   register: result
   until: result is successful

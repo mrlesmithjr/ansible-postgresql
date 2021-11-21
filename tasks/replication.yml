@@ -87,6 +87,7 @@
     dest: "{{ postgresql_data_dir }}/recovery.conf"
     owner: postgres
     group: postgres
+    mode: u=rw,g=r,o=r
   notify:
     - restart postgresql
   when:

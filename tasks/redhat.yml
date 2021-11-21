@@ -1,39 +1,52 @@
 ---
 - name: redhat | Adding EPEL Release
-  yum:
+  package:
     name: epel-release
     state: present
+  become: true
   register: result
   until: result is successful
 
 - name: redhat | Installing Pre-Reqs
-  yum:
+  package:
     name: "{{ postgresql_redhat_pre_reqs }}"
     state: present
+  become: true
   register: result
   until: result is successful
 
 - name: redhat | Installing Development Tools
-  yum:
+  package:
     name: "@Development tools"
     state: present
+  become: true
   register: result
   until: result is successful
 
 - name: redhat | Adding Postgresql Repo
-  yum:
-    name: https://download.postgresql.org/pub/repos/yum/reporpms/EL-7-x86_64/pgdg-redhat-repo-latest.noarch.rpm
+  package:
+    disable_gpg_check: true
+    name: https://download.postgresql.org/pub/repos/yum/reporpms/EL-{{ ansible_facts.distribution_major_version }}-{{ ansible_facts.machine }}/pgdg-redhat-repo-latest.noarch.rpm
     state: present
-  register: result
-  until: result is successful
+  become: true
+  register: _pg_repo_added
+  until: _pg_repo_added is successful
+
+- name: redhat | Disable the built-in PostgreSQL module # noqa no-handler
+  command: dnf -qy module disable postgresql
+  become: true
+  when:
+    - _pg_repo_added is changed
+    - ansible_facts.distribution_major_version is version('8', '>=')
 
 - name: redhat | Installing Postgresql
-  yum:
+  package:
     name:
       - "postgresql{{ _postgresql_version }}"
       - "postgresql{{ _postgresql_version }}-server"
       - "postgresql{{ _postgresql_version }}-contrib"
     state: present
+  become: true
   register: result
   until: result is successful
 
@@ -44,6 +57,7 @@
 
 - name: redhat | Initializing DB
   command: "{{ _postgresql_init_db }}"
+  become: true
   when: not _pg_db_init_check['stat']['exists']
 
 - name: redhat | Ensuring Postgresql Service Is Enabled and Started
@@ -51,3 +65,4 @@
     name: "{{ postgresql_service }}"
     state: started
     enabled: true
+  become: true

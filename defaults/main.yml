@@ -70,7 +70,8 @@ postgresql_max_wal_size: 1GB
 postgresql_min_wal_size: 80MB
 
 postgresql_redhat_pre_reqs:
-  - libpqxx-devel
+  []
+  # - libpqxx-devel
   # - python-devel
   # - python-pip
 
